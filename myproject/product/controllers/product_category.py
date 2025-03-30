@@ -66,7 +66,7 @@ class ProductCategoryViewSet(viewsets.ViewSet):
             self.service.add_product_to_category(pk, product_id)
             return Response({"message": "Product added to category."}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     @action(detail=True, methods=['post'])
     def remove_product(self, request, pk=None):
@@ -77,7 +77,7 @@ class ProductCategoryViewSet(viewsets.ViewSet):
             self.service.remove_product_from_category(pk, product_id)
             return Response({"message": "Product removed from category."}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     @action(detail=True, methods=['get'])
     def products(self, request, pk=None):
@@ -86,4 +86,4 @@ class ProductCategoryViewSet(viewsets.ViewSet):
             serializer = ProductSerializer(products, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from product.services.product import ProductService
 from product.serializers.product import ProductSerializer
 from product.pagination import StandardResultsSetPagination
+from mongoengine import Q
+
 
 class ProductViewSet(viewsets.ViewSet):
     def __init__(self, **kwargs):
@@ -48,7 +50,7 @@ class ProductViewSet(viewsets.ViewSet):
                 serializer = ProductSerializer(product)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def retrieve(self, request, pk=None):
@@ -66,7 +68,7 @@ class ProductViewSet(viewsets.ViewSet):
                 product = self.service.update_product(pk, serializer.validated_data)
                 return Response(ProductSerializer(product).data, status=status.HTTP_200_OK)
             except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def destroy(self, request, pk=None):

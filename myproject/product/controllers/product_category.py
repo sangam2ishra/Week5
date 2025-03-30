@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from product.services.product_category import PrdouctCategoryService
+from product.services.product_category import ProductCategoryService
 from product.serializers.product_category import ProductCategorySerializer
 from product.serializers.product import ProductSerializer
 from product.pagination import StandardResultsSetPagination
@@ -10,7 +10,7 @@ from product.pagination import StandardResultsSetPagination
 class ProductCategoryViewSet(viewsets.ViewSet):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.service = PrdouctCategoryService()
+        self.service = ProductCategoryService()
 
     def list(self, request):
         categories = self.service.get_all_category()
@@ -29,7 +29,7 @@ class ProductCategoryViewSet(viewsets.ViewSet):
                 category = self.service.create_category(serializer.validated_data)
                 return Response(ProductCategorySerializer(category).data, status=status.HTTP_201_CREATED)
             except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):

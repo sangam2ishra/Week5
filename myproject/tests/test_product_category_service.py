@@ -5,9 +5,9 @@ django.setup()
 
 import unittest
 from unittest.mock import MagicMock, patch
-from product.services.product_category import PrdouctCategoryService
+from product.services.product_category import ProductCategoryService
 
-from product.services.product_category import PrdouctCategoryService
+# from product.services.product_category import ProductCategoryService
 
 class TestProductCategoryService(unittest.TestCase):
     @patch('product.services.product_category.ProductService', autospec=True)
@@ -19,7 +19,7 @@ class TestProductCategoryService(unittest.TestCase):
         self.mock_product_service = MagicMock()
         mock_product_service_class.return_value = self.mock_product_service
 
-        self.product_category_service = PrdouctCategoryService()
+        self.product_category_service = ProductCategoryService()
 
 
     def test_create_category_success(self):

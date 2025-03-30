@@ -2,7 +2,7 @@ from product.repository.product_categories import ProductCategoryRepository
 from product.services.product import ProductService
 
 
-class PrdouctCategoryService:
+class ProductCategoryService:
     def __init__(self):
         self.repo = ProductCategoryRepository()
         self.product_service = ProductService()

@@ -110,7 +110,7 @@ class ProductAPITest(APITestCase):
     
     
     def test_retrieve_nonexistent_product(self):
-        fake_id = '###'
+        fake_id = '67de38ba07c4e845bfd225a8'
         url = reverse("product-detail", kwargs={"pk":fake_id})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -156,7 +156,7 @@ class ProductAPITest(APITestCase):
 
 
     def test_update_product_not_found(self):
-        fake_id='kfklasfjaklsfdjfkkfasdkf'
+        fake_id='67de38ba07c4e845bfd225a8'
         payload = {
             "name": "Updated Product",
             "description": "updation test",
@@ -166,10 +166,35 @@ class ProductAPITest(APITestCase):
         url = reverse("product-detail", kwargs={"pk": fake_id})
         response = self.client.put(url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-        print("Update Product Not found ", response.json())
+        # print("Update Product Not found ", response.json())
 
 
+    def test_delete_product_success(self):
+        # Create a product to delete.
+        category = ProductCategory.objects.first()
+        product_to_delete = Product(
+            name="Product To Delete",
+            description="This product will be deleted",
+            price=59.99,
+            brand="DeleteBrand",
+            quantity=5,
+            category=category
+        )
+        product_to_delete.save()
+        url = reverse("product-detail", kwargs={"pk": str(product_to_delete.id)})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertIsNone(Product.objects(id=product_to_delete.id).first())
+        print("Delete Product (Success): Product deleted successfully.")
 
 
+    def test_delete_nonexistent_product(self):
+        fake_id = '67de38ba07c4e845bfd225a8'
+        url = reverse("product-detail", kwargs = {"pk": fake_id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        print("Delete Product (Failure): ", response.json())
+
+    
 if __name__=='__main__':
     unittest.main(verbosity=2)
